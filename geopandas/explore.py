@@ -1,9 +1,10 @@
 from statistics import mean
 
-import geopandas
-from shapely.geometry import LineString
 import numpy as np
 import pandas as pd
+from shapely.geometry import LineString
+
+import geopandas
 
 _MAP_KWARGS = [
     "location",
@@ -361,7 +362,7 @@ GON (((180.00000 -16.06713, 180.00000...
         if categorical:
             cat = pd.Categorical(gdf[column][~nan_idx], categories=categories)
             N = len(cat.categories)
-            cmap = cmap if cmap else "tab20"
+            cmap = cmap if cmap is not None else "tab20"
 
             # colormap exists in matplotlib
             if cmap in plt.colormaps():
@@ -382,7 +383,7 @@ GON (((180.00000 -16.06713, 180.00000...
             elif pd.api.types.is_list_like(cmap):
                 if N > len(cmap):
                     cmap = cmap * (N // len(cmap) + 1)
-                color = np.take(cmap, cat.codes)
+                color = np.take(cmap, cat.codes, axis=0)
                 legend_colors = np.take(cmap, range(N))
 
             else:
